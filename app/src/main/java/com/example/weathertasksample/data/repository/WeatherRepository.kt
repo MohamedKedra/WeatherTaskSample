@@ -1,4 +1,4 @@
-package com.example.weathertasksample.repository
+package com.example.weathertasksample.data.repository
 
 import com.example.weathertasksample.app.utils.Constant
 import com.example.weathertasksample.data.local.Item

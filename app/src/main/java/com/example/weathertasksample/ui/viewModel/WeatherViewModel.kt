@@ -1,19 +1,16 @@
-package com.example.weathertasksample.viewModel
+package com.example.weathertasksample.ui.viewModel
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weathertasksample.app.base.BaseViewModel
-import com.example.weathertasksample.app.base.LiveDataState
+import com.example.common.BaseViewModel
+import com.example.common.LiveDataState
 import com.example.weathertasksample.app.utils.ConnectionManager
 import com.example.weathertasksample.data.local.Item
 import com.example.weathertasksample.data.remote.GetCurrentWeatherResponse
-import com.example.weathertasksample.repository.WeatherRepository
+import com.example.weathertasksample.data.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

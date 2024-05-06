@@ -1,15 +1,12 @@
 package com.example.weathertasksample.ui.feature
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -21,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -53,27 +51,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.common.ImageConverter
 import com.example.weathertasksample.MainActivity
 import com.example.weathertasksample.R
-import com.example.weathertasksample.app.base.DataState
+import com.example.common.DataState
 import com.example.weathertasksample.app.utils.Constant
-import com.example.weathertasksample.app.utils.ImageConverter
-import com.example.weathertasksample.data.local.Item
-import com.example.weathertasksample.data.remote.GetCurrentWeatherResponse
 import com.example.weathertasksample.ui.common.Fab
 import com.example.weathertasksample.ui.common.GenericAppBar
 import com.example.weathertasksample.ui.theme.WeatherTaskSampleTheme
-import com.example.weathertasksample.viewModel.WeatherViewModel
+import com.example.weathertasksample.ui.viewModel.WeatherViewModel
 import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 
 @Composable
 fun AddNewWeatherScreen(
     navController: NavController,
     viewModel: WeatherViewModel = hiltViewModel(),
-    owner: MainActivity
+    owner: MainActivity,
+    latLng: MutableState<Pair<Double, Double>>
 ) {
     val city = remember { mutableStateOf("") }
     val country = remember { mutableStateOf("") }
@@ -130,7 +127,7 @@ fun AddNewWeatherScreen(
 
     WeatherTaskSampleTheme {
         LaunchedEffect(key1 = "") {
-            viewModel.getCurrentLocationWeather("31.241593448111253", "29.950851921140977")
+            viewModel.getCurrentLocationWeather(latLng.value.first.toString(),latLng.value.second.toString())
             viewModel.weatherDetailsResponse.observe(owner) {
                 scope.launch {
                     Log.d("Tag", it.toString())
@@ -244,6 +241,12 @@ fun AddNewWeatherScreen(
                                 shape = CircleShape
                             )
                     )
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)) {
+                        Text(text = city.value.plus(",${country.value}"), color = Color.Black, fontSize = 17.sp)
+                        Text(text = "Latitude: ${latLng.value.first} , Longitude: ${latLng.value.second} ", color = Color.Black, fontSize = 15.sp)
+                    }
 
                     Column(
                         verticalArrangement = Arrangement.Bottom,

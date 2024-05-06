@@ -1,4 +1,4 @@
-package com.example.weathertasksample.app.utils
+package com.example.common
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

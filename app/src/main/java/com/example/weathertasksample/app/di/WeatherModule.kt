@@ -7,7 +7,7 @@ import com.example.weathertasksample.app.utils.Constant
 import com.example.weathertasksample.data.local.WeatherDao
 import com.example.weathertasksample.data.local.WeatherDatabase
 import com.example.weathertasksample.data.remote.WeatherService
-import com.example.weathertasksample.repository.WeatherRepository
+import com.example.weathertasksample.data.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

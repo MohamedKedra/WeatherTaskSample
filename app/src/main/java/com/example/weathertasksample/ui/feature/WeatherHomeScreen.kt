@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.weathertasksample.R
@@ -30,7 +32,7 @@ import com.example.weathertasksample.ui.common.Fab
 import com.example.weathertasksample.ui.common.GenericAppBar
 import com.example.weathertasksample.ui.common.WeatherList
 import com.example.weathertasksample.ui.theme.WeatherTaskSampleTheme
-import com.example.weathertasksample.viewModel.WeatherViewModel
+import com.example.weathertasksample.ui.viewModel.WeatherViewModel
 
 @Composable
 fun WeatherHomeScreen(
@@ -39,6 +41,12 @@ fun WeatherHomeScreen(
 ){
     val items = viewModel.getAllWeatherItems().observeAsState()
     val context = LocalContext.current
+    val isFahrenheit = remember {
+        mutableStateOf(true)
+    }
+    val temp = remember {
+        mutableStateOf("Fahrenheit")
+    }
 
     WeatherTaskSampleTheme {
         WeatherTaskSampleTheme {
@@ -48,22 +56,11 @@ fun WeatherHomeScreen(
                     GenericAppBar(
                         title = "Weather List",
                         onIconClick = {
-//                            viewModel.addNewWeatherItem(
-//                                city = city.value,
-//                                status = status.value,
-//                                imageUri = currentPhoto.value,
-//                                temp = temp.value,
-//                                humidity = humidity.value,
-//                                windSpeed = windSpeed.value,
-//                            )
-//                            navController.popBackStack()
+                                      isFahrenheit.value = ! isFahrenheit.value
+                            temp.value = if (isFahrenheit.value) "Fahrenheit" else "Celsius"
                         },
                         icon = {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.baseline_add_to_photos_24),
-                                contentDescription = "save note",
-                                tint = Color.White
-                            )
+                            Text(text = temp.value, color = Color.White, fontSize = 14.sp)
                         },
                         iconState = remember {
                             mutableStateOf(true)
@@ -87,7 +84,7 @@ fun WeatherHomeScreen(
                     ) {
                         val list = items.value
                         if (list != null){
-                            WeatherList(items = list)
+                            WeatherList(items = list,isFahrenheit.value)
                         }else{
                             EmptyList()
                         }
