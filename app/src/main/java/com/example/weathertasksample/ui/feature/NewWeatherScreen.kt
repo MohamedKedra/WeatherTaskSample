@@ -59,6 +59,8 @@ import com.example.weathertasksample.MainActivity
 import com.example.weathertasksample.R
 import com.example.common.DataState
 import com.example.weathertasksample.app.utils.Constant
+import com.example.weathertasksample.data.FileConverter
+import com.example.weathertasksample.data.local.BitmapConverter
 import com.example.weathertasksample.ui.common.Fab
 import com.example.weathertasksample.ui.common.GenericAppBar
 import com.example.weathertasksample.ui.theme.WeatherTaskSampleTheme
@@ -102,12 +104,13 @@ fun AddNewWeatherScreen(
         if (it != null) {
             bitmap.value = it
         }
-        currentPhoto.value = it.toString()
+        currentPhoto.value = ImageConverter.converterBitmapToString(it!!)
     }
     val launcherImage = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.OpenDocument()
     ) {
         if (Build.VERSION.SDK_INT < 28) {
+
             bitmap.value =
                 MediaStore.Images.Media.getBitmap(
                     context.contentResolver,
@@ -123,6 +126,7 @@ fun AddNewWeatherScreen(
             }!!
             savaButtonState.value = true
         }
+        currentPhoto.value = it.toString()
     }
 
     WeatherTaskSampleTheme {
@@ -149,8 +153,6 @@ fun AddNewWeatherScreen(
                                     Constant.iconUrl + weather?.get(0)?.icon + Constant.imageSuffix
                                 city.value = name.toString()
                                 country.value = sys?.country.toString()
-                                currentPhoto.value =
-                                    ImageConverter.converterBitmapToString(bitmap.value)
                             }
                         }
 
@@ -241,6 +243,23 @@ fun AddNewWeatherScreen(
                                 shape = CircleShape
                             )
                     )
+                    val bit = ImageConverter.converterStringToBitmap(currentPhoto.value)
+                    if (bit != null) {
+                        Image(
+                            bitmap = bit.asImageBitmap(),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(250.dp)
+                                .background(color = Color.White)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color.Black,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
                     Column(modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)) {
@@ -288,7 +307,7 @@ fun AddNewWeatherScreen(
                                         modifier = Modifier
                                             .size(50.dp)
                                             .clickable {
-                                                launcherImage.launch("image/*")
+                                                launcherImage.launch(arrayOf("image/*"))
                                                 showDialog = false
                                             }
                                     )

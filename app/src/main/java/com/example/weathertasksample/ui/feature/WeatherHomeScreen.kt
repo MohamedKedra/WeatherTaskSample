@@ -84,7 +84,7 @@ fun WeatherHomeScreen(
                     ) {
                         val list = items.value
                         if (list != null){
-                            WeatherList(items = list,isFahrenheit.value)
+                            WeatherList(items = list,isFahrenheit.value,context)
                         }else{
                             EmptyList()
                         }
